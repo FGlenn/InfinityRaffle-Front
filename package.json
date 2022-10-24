@@ -17,6 +17,7 @@
     "web3uikit": "^0.1.159"
   },
   "devDependencies": {
+    "@svgr/webpack": "^6.5.0",
     "autoprefixer": "^10.4.4",
     "eslint": "8.13.0",
     "eslint-config-next": "12.1.5",

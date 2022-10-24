@@ -56,6 +56,10 @@ Video coming soon...
 ## Quickstart
 
 ```
+Automatic setup: yarn create next-app .
+
+or
+
 git clone https://github.com/PatrickAlphaC/nextjs-smartcontract-lottery-fcc
 cd nextjs-smartcontract-lottery-fcc
 yarn

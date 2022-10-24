@@ -2,13 +2,13 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import Header from "../components/Header";
 import RecentWinner from "../components/RecentWinner";
-import Front from "../components/Front";
+import InstructionManual from "../components/InstructionManual";
 import { useMoralis } from "react-moralis";
 
 const supportedChains = ["5"];
 
 
-export default function Home() {
+export default function Instructions() {
   const { isWeb3Enabled, chainId } = useMoralis();
 
   return (
@@ -21,7 +21,7 @@ export default function Home() {
               <link rel="icon" href="/favicon.ico" />
             </Head>
              <Header />
-            <Front/>
+            <InstructionManual/>
         </div>
       </div>
     </div>
