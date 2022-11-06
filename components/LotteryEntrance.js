@@ -4,7 +4,6 @@ import { useMoralis, useWeb3Contract } from "react-moralis"
 import { useEffect, useState } from "react"
 import { useNotification } from "web3uikit"
 import { ethers } from "ethers"
-import Countdown from "../components/Countdown";
 
 export default function LotteryEntrance() {
     const { Moralis, isWeb3Enabled, chainId: chainIdHex, account: address } = useMoralis()
@@ -13,10 +12,9 @@ export default function LotteryEntrance() {
     // console.log(`ChainId is ${chainId}`) ---> gives the hex version of the chain ID
     const playerAddress = address.toString()
     const raffleAddress = chainId in contractAddresses ? contractAddresses[chainId]["RaffleV32"][0] : null
-    // const dappTokenAddress = chainId ? (networkMapping as any)[stringChainId]["DappToken"][0] : constants.AddressZero
 
     // State hooks
-    // The reasonto use useState is it rerenders the view. Variables by themselves only change bits in memory
+    // The reason to use useState is it rerenders the view. Variables by themselves only change bits in memory
     // and the state of your app can get out of sync with the view.
     // https://stackoverflow.com/questions/58252454/react-hooks-using-usestate-vs-just-variables
     // const [variable updated by state, function sets variable ] = useState("starting value variable")
@@ -25,6 +23,7 @@ export default function LotteryEntrance() {
     const [entranceFee, setEntranceFee] = useState("0")
     const [numberOfPlayers, setNumberOfPlayers] = useState("0")
     const [raffleState, setRaffleState] = useState("0")
+
 
     // Countdown timer
     const [days, setDays] = useState("0")
@@ -68,7 +67,7 @@ export default function LotteryEntrance() {
         params: {},
     })
 
-    /* View Functions */
+    //////// View Functions ////////
 
     const { runContractFunction: i_interval } = useWeb3Contract({
         abi: abi["abi"],
@@ -121,37 +120,13 @@ export default function LotteryEntrance() {
     })
 
     //////// Countdown timer ////////
-    
 
     useEffect(() => {
-        
-            const frequency = setInterval(() => {
-                const target =  (intervalRaffle.toLocaleString()*1000 + lastTime.toLocaleString()*1000)
-                    const now = new Date();
-                    
-                    const difference = target - (now.getTime());
-                
-                    const d = Math.floor(difference / (1000 * 60 * 60 * 24))
-                    setDays(addLeadingZeros(d, 2))
-                
-                    const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    setHours(addLeadingZeros(h, 2))
-                
-                    const m = Math.floor((difference % (1000 * 60 * 60 )) / (1000 * 60));
-                    setMinutes(addLeadingZeros(m, 2))
-                
-                    const s = Math.floor((difference % (1000 * 60 )) / (1000));
-                    setSeconds(addLeadingZeros(s, 2))
-                
-                    if(d <= 0 && h <= 0 && m <= 0 && s <= 0){
-                        setRaffleTime(true)}
-            }, 1000);
+        if (countDownState) {
+            updateCountdownValues()
+        }
+    }, [countDownState])
     
-            return () => clearInterval(frequency);
-    
-        
-    }, [])
-
     async function updateCountdownValues() {
         const intervalFromCall = (await i_interval()).toLocaleString()
         const lastTimeStampFromCall = (await s_lastTimeStamp()).toLocaleString()
@@ -164,12 +139,41 @@ export default function LotteryEntrance() {
         setStateCountdown(stateCountdown)
     }
 
-
     useEffect(() => {
-            updateCountdownValues()
-    }, [])
+
+            const frequency = setInterval(() => {
+                const target =  (intervalRaffle*1000  + lastTime*1000)                  
+                const difference = target - ((new Date()).getTime());
+
+                if(difference >= 0){
+                    let d = Math.floor(difference / (1000 * 60 * 60 * 24));
+                    setDays(addLeadingZeros(d, 2))
+                    let h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    setHours(addLeadingZeros(h, 2))
+                    let m = Math.floor((difference % (1000 * 60 * 60 )) / (1000 * 60));
+                    setMinutes(addLeadingZeros(m, 2))
+                    let s = Math.floor((difference % (1000 * 60 )) / (1000));
+                    setSeconds(addLeadingZeros(s, 2))
+                    setRaffleTime(false)
+                }
+                else {
+                    setRaffleTime(true)
+                }
+            }, 1000);
+
+            return () => clearInterval(frequency);
+
+    }, [raffleState])
+
 
     //////// UI values ////////
+
+    useEffect(() => {
+        if (isWeb3Enabled) {
+            updateUIValues()
+        }
+    }, [isWeb3Enabled])
+
     async function updateUIValues() {
         const hasIndexFromCall = (await getHasIndex()).valueOf()
         const yieldBalanceFromCall = (await getYieldBalance()).toString()
@@ -185,12 +189,6 @@ export default function LotteryEntrance() {
         setNumberOfPlayers(numPlayersFromCall)
         setRaffleState(state)
     }
-
-    useEffect(() => {
-        if (isWeb3Enabled) {
-            updateUIValues()
-        }
-    }, [isWeb3Enabled])
 
     const handleNewNotification = () => {
         dispatch({
@@ -213,12 +211,12 @@ export default function LotteryEntrance() {
             <div className= 'rounded-[12px] p-10 bg-gradient-to-b from-indigo-300 via-purple-200 to-pink-300 drop-shadow-2xl'> 
                 {raffleAddress ? (
                     <>
-                        <div class= 'text-center'>
-                            <div className="py-1 px-4 font-bold  text-l">Next Round's Prize</div>
+                        <div className= 'text-center'>
+                            <div className="py-1 px-4 font-bold  text-l">Next Round&apos;s Prize</div>
                             <div className="pt-1 px-4 font-extrabold text-6xl text-black">{ethers.utils.formatUnits(yieldBalance, "ether")} ETH</div>
                             <div className="mb-12 text-xs">*{numberOfPlayers} participating players </div>
                             <div className="flex justify-center my-8 mx-auto"> 
-                            {raffleTime ? <div>Waiting for next raffle..</div> : 
+                            {raffleTime ? <div>Calculating winner. Waiting for next raffle.</div> : 
                             <div className="flex my-auto text-center">
                                 <div className="flex flex-col border-white border-2 rounded-[6px] px-1">
                                     <span className="flex front-bold text-3xl pt-1">{days}</span>
@@ -253,8 +251,8 @@ export default function LotteryEntrance() {
                             >
                                 {loadingPause || fetchingPause ? (
                                     <div className="animate-spin spinner-border h-8 w-8 border-b-2 rounded-full"></div>
-                                ) : (<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
+                                ) : (<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="w-8 h-8">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
                                     </svg> 
                                 )}
                             </button>) : (<button
@@ -269,8 +267,8 @@ export default function LotteryEntrance() {
                             >
                                 {loadingPause || fetchingPause ? (
                                     <div className="animate-spin spinner-border h-8 w-8 border-b-2 rounded-full"></div>
-                                ) : (<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+                                ) : (<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="w-8 h-8">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
                                     </svg>
                                 )}
                             </button>)}

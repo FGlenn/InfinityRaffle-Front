@@ -36,8 +36,8 @@ export default function LotteryEntrance() {
     return (
         <div className="flex justify-center mt-6 mx-auto">
             <div className= 'border-2 border-indigo-300 rounded-[12px] p-1 bg-indigo-200 drop-shadow-xl'> 
-                <div class="flex items-center">
-                    <img src="https://openmoji.org/data/color/svg/1F389.svg" alt="party" class="-scale-x-1" width="20" height="20"></img>
+                <div className="flex items-center">
+                    <img src="https://openmoji.org/data/color/svg/1F389.svg" alt="party" className="-scale-x-1" width="20" height="20"></img>
                     <div className="text-sm font-extralight">Congratulations to the most recent winner... </div>
                     <div className="flex justify-center text-sm font-extralight ">{recentWinner.slice(0, 6)}...{recentWinner.slice(recentWinner.length - 4)}</div>
                     <img src="https://openmoji.org/data/color/svg/1F389.svg" alt="party" width="20" height="20"></img>

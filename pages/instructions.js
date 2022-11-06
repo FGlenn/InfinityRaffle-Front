@@ -12,7 +12,7 @@ export default function Instructions() {
   const { isWeb3Enabled, chainId } = useMoralis();
 
   return (
-    <div class= "bg-gradient-to-b from-indigo-50">
+    <div className= "bg-gradient-to-b from-indigo-50">
       <div className={styles.container}>
         <div>
             <Head>

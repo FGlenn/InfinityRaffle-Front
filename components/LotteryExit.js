@@ -1,5 +1,4 @@
 import { contractAddresses, abi } from "../constants"
-// dont export from moralis when using react
 import { useMoralis, useWeb3Contract } from "react-moralis"
 import { useEffect, useState } from "react"
 import { useNotification } from "web3uikit"
@@ -120,20 +119,20 @@ export default function LotteryEntrance() {
             <div className= 'rounded-[12px] p-10 bg-gradient-to-b from-indigo-300 via-purple-200 to-pink-300 drop-shadow-2xl'> 
                 {raffleAddress ? (
                     <>
-                        <div class= 'text-center'>
-                            <div class="flex flex-row justify-between mb-10">
+                        <div className= 'text-center'>
+                            <div className="flex flex-row justify-between mb-10">
                                 <h2 className="font-bold text-2xl">Player </h2>
                                 <div className="font-bold text-2xl">{playerAddress.slice(0, 6)}...{playerAddress.slice(playerAddress.length - 4)}</div>
                             </div>
-                            <div class="flex flex-row justify-between ">
+                            <div className="flex flex-row justify-between ">
                                 <div>Deposited </div>
                                 <div className="mx-left">{ethers.utils.formatUnits(playerDeposited, "ether")} ETH</div>
                             </div>
-                            <div class="flex flex-row justify-between">
+                            <div className="flex flex-row justify-between">
                                 <div>Won prizes </div>
                                 <div>{ethers.utils.formatUnits(playerPrizes, "ether")} ETH</div>
                             </div>
-                            <div class="flex flex-row justify-between border-t border-opacity-30 border-black">
+                            <div className="flex flex-row justify-between border-t border-opacity-30 border-black">
                                 <div>Total balance </div>
                                 <div>{ethers.utils.formatUnits(playerBalance, "ether")} ETH</div>
                             </div>
