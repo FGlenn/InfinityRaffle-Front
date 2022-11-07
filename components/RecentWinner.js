@@ -3,7 +3,6 @@ import { contractAddresses, abi } from "../constants"
 import { useMoralis, useWeb3Contract } from "react-moralis"
 import { useEffect, useState } from "react"
 import Image from 'next/image';
-import rocket from "../img/rocket.png";
 
 export default function LotteryEntrance() {
     const { Moralis, isWeb3Enabled, chainId: chainIdHex} = useMoralis()
@@ -23,7 +22,7 @@ export default function LotteryEntrance() {
 
     async function updateUIValues() {
         const recentWinnerFromCall = await getRecentWinner()
-
+    
         setRecentWinner(recentWinnerFromCall)
     }
 
@@ -31,16 +30,16 @@ export default function LotteryEntrance() {
         if (isWeb3Enabled) {
             updateUIValues()
         }
-    }, [isWeb3Enabled])
+    }, [isWeb3Enabled]) 
 
     return (
         <div className="flex justify-center mt-6 mx-auto">
             <div className= 'border-2 border-indigo-300 rounded-[12px] p-1 bg-indigo-200 drop-shadow-xl'> 
                 <div className="flex items-center">
-                    <img src="https://openmoji.org/data/color/svg/1F389.svg" alt="party" className="-scale-x-1" width="20" height="20"></img>
+                    <image src="https://openmoji.org/data/color/svg/1F389.svg" alt="party" className="-scale-x-1" width="20" height="20"></image>
                     <div className="text-sm font-extralight">Congratulations to the most recent winner... </div>
                     <div className="flex justify-center text-sm font-extralight ">{recentWinner.slice(0, 6)}...{recentWinner.slice(recentWinner.length - 4)}</div>
-                    <img src="https://openmoji.org/data/color/svg/1F389.svg" alt="party" width="20" height="20"></img>
+                    <image src="https://openmoji.org/data/color/svg/1F389.svg" alt="party" width="20" height="20"></image>
                 </div>
             </div>
         </div >

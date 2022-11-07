@@ -272,8 +272,6 @@ export default function LotteryEntrance() {
                                     </svg>
                                 )}
                             </button>)}
-                            <div>{(intervalRaffle.toLocaleString()*1000 + lastTime.toLocaleString()*1000)}</div>
-                            <div>{new Date().getTime()}</div>
                             <div>Entrance Fee: {ethers.utils.formatUnits(entranceFee, "ether")} ETH</div>
                             <button
                                 className="grow min-w-full bg-indigo-300 hover:bg-indigo-400 text-white font-bold py-2 px-4 rounded mx-auto"
